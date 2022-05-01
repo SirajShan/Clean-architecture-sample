@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".postdetails.PostDetailActivity" />
+        <activity android:name=".comments.CommentsActivity"/>
     </application>
 
 </manifest>
