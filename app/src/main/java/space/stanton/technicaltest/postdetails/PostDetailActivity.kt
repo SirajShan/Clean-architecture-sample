@@ -1,6 +1,8 @@
 package space.stanton.technicaltest.postdetails
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +37,11 @@ class PostDetailActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.title).text = post?.title
         findViewById<TextView>(R.id.content).text = post?.body
         this@PostDetailActivity.title = post?.title
-
+        findViewById<Button>(R.id.commentsBtn).setOnClickListener {
+            startActivity(
+                Intent(this, PostDetailActivity::class.java)
+                    .putExtra("postId", post?.id)
+            )
+        }
     }
 }

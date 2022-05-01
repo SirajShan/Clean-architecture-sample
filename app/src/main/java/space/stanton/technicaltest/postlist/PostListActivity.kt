@@ -1,17 +1,19 @@
 package space.stanton.technicaltest.postlist
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONArray
-import org.json.JSONObject
-import space.stanton.technicaltest.ApiCalls
 import space.stanton.technicaltest.R
-import space.stanton.technicaltest.network.model.PostsItem
-import space.stanton.technicaltest.postdetails.PostDetailActivity
+
 
 /**
  * Displays a list of posts
@@ -19,26 +21,52 @@ import space.stanton.technicaltest.postdetails.PostDetailActivity
 @AndroidEntryPoint
 class PostListActivity : AppCompatActivity() {
 
-    private val viewModel: PostListViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_posts)
 
-        viewModel.posts.observe(this) {
-            UpdateUI(it.data)
-        }
+        val fm = supportFragmentManager
 
+        val sa = ViewStateAdapter(fm, lifecycle)
+        val pa = findViewById<ViewPager2>(R.id.pager)
+        pa.adapter = sa
+
+        val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        tabLayout.addTab(tabLayout.newTab().setText("Posts"))
+        tabLayout.addTab(tabLayout.newTab().setText("Offline Posts"))
+
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                pa.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+
+        pa.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                tabLayout.selectTab(tabLayout.getTabAt(position))
+            }
+        })
     }
 
-    private fun UpdateUI(data: ArrayList<PostsItem>?) {
-        findViewById<RecyclerView>(R.id.postsList).adapter =
-            PostAdapter(data, onItemClick = { id ->
-                startActivity(
-                    Intent(this, PostDetailActivity::class.java)
-                        .putExtra("postId", id)
-                )
-            })
+    private class ViewStateAdapter(
+        @NonNull fragmentManager: FragmentManager,
+        @NonNull lifecycle: Lifecycle
+    ) : FragmentStateAdapter(fragmentManager, lifecycle) {
+        override fun getItemCount(): Int {
+            return 2
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            if(position == 0) {
+                return UpdatedPostsFragment()
+            }
+
+            return OfflinePostsFragment()
+        }
+
     }
 }
 
