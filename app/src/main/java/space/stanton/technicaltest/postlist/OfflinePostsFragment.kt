@@ -32,9 +32,11 @@ class OfflinePostsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.posts.observe(requireActivity()) {
+        viewModel.offlinePosts.observe(requireActivity()) {
             updateUI(it.data)
         }
+
+        viewModel.getPostsOffline(requireContext())
     }
 
     private fun updateUI(data: ArrayList<PostsItem>?) {

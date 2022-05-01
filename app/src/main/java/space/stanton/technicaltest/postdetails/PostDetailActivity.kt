@@ -11,10 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.filterList
 import space.stanton.technicaltest.Constants
 import space.stanton.technicaltest.R
 import space.stanton.technicaltest.cache.PreferenceManager
+import space.stanton.technicaltest.cache.PreferenceManager.set
 import space.stanton.technicaltest.comments.CommentsActivity
 import space.stanton.technicaltest.network.model.PostsItem
 import space.stanton.technicaltest.postlist.PostListViewModel
@@ -56,12 +56,12 @@ class PostDetailActivity : AppCompatActivity() {
 
         toggle.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
 
-
+            val gson = Gson()
             val settings = PreferenceManager.customPrefs(this, Constants.PREF_NAME)
             val postList = settings.getString("postToReadOffline", null)
 
             if(postList != null) {
-                var posts: ArrayList<PostsItem> = Gson().fromJson(
+                var posts: ArrayList<PostsItem> = gson.fromJson(
                     postList,
                     object : TypeToken<ArrayList<PostsItem>>() {}.type
                 )
@@ -71,9 +71,11 @@ class PostDetailActivity : AppCompatActivity() {
                 if(isChecked) {
                     newList.add(post)
                 }
+
+                val jsonTutMap: String = gson.toJson(newList)
+                settings["postToReadOffline"] = jsonTutMap
+
             }
         })
-
-
     }
 }
