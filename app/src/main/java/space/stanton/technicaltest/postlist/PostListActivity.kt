@@ -69,7 +69,7 @@ class PostListActivity : AppCompatActivity() {
             return if(position == 0) {
                 PostsFragment()
             } else {
-                OfflinePostsFragment()
+                PostsOfflineFragment()
             }
         }
 

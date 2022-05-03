@@ -18,7 +18,7 @@ class CommentsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_comments)
         val id = intent.getIntExtra("postId", 0)
 
         viewModel.comments.observe(this) {

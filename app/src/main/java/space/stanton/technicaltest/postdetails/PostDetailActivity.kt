@@ -30,7 +30,7 @@ class PostDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_details)
-        val id = intent.getIntExtra("postId", 0)
+        val id = intent.getIntExtra(Constants.POST_ID, 0)
         viewModel.postDetails.observe(this) {
             updateUI(it.data!!)
         }
@@ -50,13 +50,20 @@ class PostDetailActivity : AppCompatActivity() {
             )
         }
 
+        val settings = PreferenceManager.customPrefs(this, Constants.PREF_NAME)
+
+
         val toggle = findViewById<Switch>(R.id.switch1)
+
+        toggle.isChecked = settings.getBoolean(Constants.PREF_CACHE_STATUS, false)
 
         toggle.setOnCheckedChangeListener { _, isChecked ->
 
             val gson = Gson()
-            val settings = PreferenceManager.customPrefs(this, Constants.PREF_NAME)
-            val postList = settings.getString("postToReadOffline", null)
+            val postList = settings.getString(
+                Constants.PREF_TEXT_TO_READ_OFFLINE,
+                null
+            )
 
             var newPostList: ArrayList<PostsItem> = ArrayList()
 
@@ -75,7 +82,8 @@ class PostDetailActivity : AppCompatActivity() {
             }
 
             val jsonTutMap: String = gson.toJson(newPostList)
-            settings["postToReadOffline"] = jsonTutMap
+            settings[Constants.PREF_TEXT_TO_READ_OFFLINE] = jsonTutMap
+            settings[Constants.PREF_CACHE_STATUS] = isChecked
         }
     }
 }

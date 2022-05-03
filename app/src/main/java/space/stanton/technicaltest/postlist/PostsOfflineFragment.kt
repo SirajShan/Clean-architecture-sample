@@ -9,12 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import space.stanton.technicaltest.Constants
 import space.stanton.technicaltest.R
 import space.stanton.technicaltest.network.model.PostsItem
 import space.stanton.technicaltest.postdetails.PostDetailActivity
 
 @AndroidEntryPoint
-class OfflinePostsFragment : Fragment() {
+class PostsOfflineFragment : Fragment() {
 
     private val viewModel: PostListOfflineViewModel by activityViewModels()
 
@@ -40,7 +41,7 @@ class OfflinePostsFragment : Fragment() {
             PostOfflineAdapter(data, onItemClick = { id ->
                 startActivity(
                     Intent(activity, PostDetailActivity::class.java)
-                        .putExtra("postId", id)
+                        .putExtra(Constants.POST_ID, id)
                 )
             })
     }
