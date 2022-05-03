@@ -16,11 +16,7 @@ import space.stanton.technicaltest.postdetails.PostDetailActivity
 @AndroidEntryPoint
 class OfflinePostsFragment : Fragment() {
 
-    private val viewModel: PostListViewModel by activityViewModels()
-
-    companion object {
-        fun newInstance() = OfflinePostsFragment()
-    }
+    private val viewModel: PostListOfflineViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +32,12 @@ class OfflinePostsFragment : Fragment() {
             updateUI(it.data)
         }
 
-        viewModel.getPostsOffline(requireContext())
+        viewModel.getPostsOffline()
     }
 
     private fun updateUI(data: ArrayList<PostsItem>?) {
-        activity?.findViewById<RecyclerView>(R.id.postsList)?.adapter =
-            PostAdapter(data, onItemClick = { id ->
+        activity?.findViewById<RecyclerView>(R.id.postsListOffline)?.adapter =
+            PostOfflineAdapter(data, onItemClick = { id ->
                 startActivity(
                     Intent(activity, PostDetailActivity::class.java)
                         .putExtra("postId", id)

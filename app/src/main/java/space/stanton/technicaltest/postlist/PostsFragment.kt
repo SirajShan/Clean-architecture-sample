@@ -14,13 +14,9 @@ import space.stanton.technicaltest.network.model.PostsItem
 import space.stanton.technicaltest.postdetails.PostDetailActivity
 
 @AndroidEntryPoint
-class UpdatedPostsFragment : Fragment() {
+class PostsFragment : Fragment() {
 
     private val viewModel: PostListViewModel by activityViewModels()
-
-    companion object {
-        fun newInstance() = UpdatedPostsFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +30,8 @@ class UpdatedPostsFragment : Fragment() {
         viewModel.posts.observe(requireActivity()) {
             updateUI(it.data)
         }
+
+        viewModel.getPosts()
     }
 
     private fun updateUI(data: ArrayList<PostsItem>?) {

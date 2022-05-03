@@ -38,6 +38,9 @@ class PostListActivity : AppCompatActivity() {
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 pa.currentItem = tab.position
+
+                sa.notifyDataSetChanged()
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -55,16 +58,19 @@ class PostListActivity : AppCompatActivity() {
         @NonNull fragmentManager: FragmentManager,
         @NonNull lifecycle: Lifecycle
     ) : FragmentStateAdapter(fragmentManager, lifecycle) {
+
+        private val NUM_TABS = 2
+
         override fun getItemCount(): Int {
-            return 2
+            return NUM_TABS
         }
 
         override fun createFragment(position: Int): Fragment {
-            if(position == 0) {
-                return UpdatedPostsFragment()
+            return if(position == 0) {
+                PostsFragment()
+            } else {
+                OfflinePostsFragment()
             }
-
-            return OfflinePostsFragment()
         }
 
     }

@@ -1,5 +1,7 @@
 package space.stanton.technicaltest.di
 
+import android.app.Application
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,6 +12,7 @@ import space.stanton.technicaltest.network.repository.CommentsRepository
 import space.stanton.technicaltest.network.repository.PostRepository
 import space.stanton.technicaltest.network.repositoryimpl.CommentsRepositoryImpl
 import space.stanton.technicaltest.network.repositoryimpl.PostRepositoryImpl
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -27,5 +30,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesCommentRepository(postsAPI: PostsAPI) : CommentsRepository=  CommentsRepositoryImpl(postsAPI)
+    fun providesCommentRepository(postsAPI: PostsAPI) : CommentsRepository=  CommentsRepositoryImpl(
+        postsAPI
+    )
+
+    @Singleton
+    @Provides
+    @Named("AppContext")
+    fun providesContext(application: Application): Context? {
+        return application.applicationContext
+    }
 }
