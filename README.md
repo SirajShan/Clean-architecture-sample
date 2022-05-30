@@ -18,7 +18,7 @@ The following endpoints are used to fetch data from server.
 
     GET https://jsonplaceholder.typicode.com/posts/{POST_ID}/comments/
 
-## Home tasks
+##  Tasks
 
     The original post list and the offline post list screens should be embedded
     in a tabbed view. 
